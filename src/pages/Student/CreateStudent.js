@@ -1,24 +1,139 @@
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Form, Button, Table } from 'react-bootstrap'
 
 
 export default function CreateStudent() {
 
 
+    const [teachers, setTeachers] = useState([]);
+    const [students, setStudents] = useState([]);
+    const [teacherName, setTeacherName] = useState([]);
+    const [teacherIds, setTeacherIds] = useState([])
+
     useEffect(()=>{
-        fetch(`http://localhost:1337/api/students`,{
-                "Header" :"post"
+
+        //  Here Student  is called by Api 
+        fetch(`http://localhost:1337/api/students?populate=*`,{
+            method:"GET",
         }
         )
         .then((res)=>{ 
-            return res.json
+            return res.json()
         })
         .then((data)=>{
             
+            console.log("Student ----- >",data.data);
+            setStudents(data.data);
+
+              
         })
-        .catch(()=>{})
+        .catch((err)=>{
+            console.log(err)
+        })
+//  Here Theacher is called by Api 
+        fetch(`http://localhost:1337/api/teachers`,{
+            method:"GET",
+        })
+            
+        .then((res)=>{
+            return res.json()
+        })
+        .then((data)=>{
+            console.log("Teacher ----- >",data.data);
+            setTeachers(data.data);
+        })
+        .catch((err)=>{    
+        })
     },[]);
+
+
+    let createStudent = () => {
+
+        // alert("Student Created Successfully")
+        let payload ={
+            "data":{
+                "name":document.getElementById('student_name').value,
+                "teachers": teacherIds
+            }
+        }
+
+        console.log("payload === >",payload)
+
+
+        fetch(`http://localhost:1337/api/students`,{
+            method:"POST",
+            headers:{
+                "Content-Type": "application/json"
+            },
+            body : JSON.stringify(payload)
+        })
+        .then((res)=>{res.json()})
+        .then((data)=>{
+            alert("Student is successfully Created ");
+            // window.location.reload();   ===> this is way to relode whole page but it is not working properly;
+            document.querySelector("table#mytbl > tbody").innerHTML += `<tr key={ind}>
+                                                                                    <td>${document.getElementById('student_name').value}</td>
+                                                                                    <td>${document.getElementById('student_name').value}</td>
+                                                                                    <td></td>
+                                                                                    <td>
+                                                                                        <Button className="btn btn-sm me-1 btn-success" >View</Button>
+                                                                                        <Button className="btn btn-sm me-1 btn-primary">Edit</Button>
+                                                                                        <Button className="btn btn-sm me-1 btn-danger"  onClick={(e)=>{ deleteStudent(e) }} >Delete</Button>
+
+                                                                                </td>
+                                                            
+                                                                    </tr>`
+        })
+        .catch((err)=>{
+            
+        })
+    }
+
+
+
+    let handleSelect = function(selectedItems) {
+        const teacherids = [];
+        for(let i=0; i<selectedItems.length;i++){
+            teacherids.push(parseInt(selectedItems[i].value));
+        }
+        setTeacherIds(teacherids)
+
+
+
+    };
+
+
+    let deleteStudent = (e) =>{
+        let tr = e.target.closest('tr');
+        // console.log(tr.querySelector('td:first-child').innerHTML)
+        let sid = tr.querySelector('td:first-child').innerHTML
+        
+        let x = window.confirm("do you really want to delete stydent")
+        if(x === true){
+
+            
+        fetch(`http://localhost:1337/api/students/${sid}`,{
+            method:"DELETE",
+
+        })
+        .then((res)=>{res.json()})
+        .then((data)=>{
+            console.log(`Student Deleted`);
+            alert("Student Suceesfully deleted")
+            tr.remove();
+
+            
+        })
+        .catch((err)=>{
+            console.log("Delete Student EDrror = > ", err)
+
+        })
+
+        }
+
+    }
+
 
 
                 return (
@@ -34,24 +149,29 @@ export default function CreateStudent() {
                         <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail"> 
                         <Form.Label>Select Teacher Name:</Form.Label>
-                            <Form.Select aria-label="Default select example">
-                                    <option>Open this select menu</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                            <Form.Select   value={teacherIds} id='teacher' name="teacher"  onChange={(e)=>{handleSelect(e.target.selectedOptions)}}>
+
+                                    {
+                                        teachers.map((cvs, inds, arrs)=>{
+                                            // console.log(cvs.id)
+                                            return <option key={inds} value={cvs.id}>{cvs.attributes.name}</option>
+                                        })
+                                    }
+
+
                             </Form.Select>
 
                             </Form.Group> 
 
 
-                            <Form.Group className="mb-3" controlId="formBasicEmail">  
+                            <Form.Group className="mb-3" >  
                                 <Form.Label>Student Name</Form.Label>
-                                <Form.Control type="text" placeholder="Enter Student Name" />
+                                <Form.Control type="text" placeholder="Enter Student Name" id="student_name" />
                                 <Form.Text className="text-muted">
                                    
                                 </Form.Text>
                             </Form.Group>
-                            <Button variant="primary" type="submit">
+                            <Button variant="primary" type="button" onClick={()=>{ createStudent() }}>
                                 Submit
                             </Button>
                         </Form>
@@ -59,26 +179,49 @@ export default function CreateStudent() {
                         <hr />
                         <br />
 
-                        <Table striped bordered hover>
+                        <Table striped bordered hover id='mytbl'>
                             <thead>
+                               
                                 <tr>
                                     <th>#</th>
                                     <th>Student  Name</th>
+                                    <th>Teachers</th>
                                     <th>Action</th>
                                </tr>
                             </thead>
                             <tbody>
-                                     <tr>
-                                        <td>1</td>
-                                        <td>Mark</td>
-                                        <td>
-                                            <Button className="btn btn-sm me-1 btn-success" >View</Button>
-                                            <Button className="btn btn-sm me-1 btn-primary">Edit</Button>
-                                            <Button className="btn btn-sm me-1 btn-danger" >Delete</Button>
+                                {
+                                    students.map((cv, ind,arr )=>{
 
-                                        </td>
+                                        return  <tr key={ind}>
+                                                    <td>{cv.id}</td>
+                                                    <td>{cv.attributes.name}</td>
+                                                    <td>{
+                                                       
+                                                        //    console.log("tchr-->",cv.attributes.teachers.data)
+                                                                
+                                                        cv.attributes.teachers.data.map((cv2,idx2,arr2) => {
+                                                            return cv2.attributes.name+" ";
+                                                       }).toString()
+                
+                
+
+                                                                // console.log('Typr of V ==> ',v.toString())
+
+
+                                                        }</td>
+                                                    <td>
+                                                        <Button className="btn btn-sm me-1 btn-success" >View</Button>
+                                                        <Button className="btn btn-sm me-1 btn-primary">Edit</Button>
+                                                        <Button className="btn btn-sm me-1 btn-danger" id={`sid${cv.id}`} onClick={(e)=>{ deleteStudent(e) }} >Delete</Button>
+
+                                                 </td>
                                
                                      </tr>
+                                        
+                                    })
+
+                                }
                                
                             </tbody>
                             </Table>
