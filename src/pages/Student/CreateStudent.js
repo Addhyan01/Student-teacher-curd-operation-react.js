@@ -9,7 +9,7 @@ export default function CreateStudent() {
 
     const [teachers, setTeachers] = useState([]);
     const [students, setStudents] = useState([]);
-    const [teacherName, setTeacherName] = useState([]);
+  
     const [teacherIds, setTeacherIds] = useState([])
 
     useEffect(()=>{
