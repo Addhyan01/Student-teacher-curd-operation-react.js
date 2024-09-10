@@ -61,7 +61,7 @@ export default function Home() {
 
             <>
                <div className='container'>
-               <h1 className='text-center mt-5'> Welcome to Dashoard </h1>
+               <h1 className='text-center mt-5'> Welcome to Dashboard </h1>
             <h3 className='text-center mt-5'> Student Details </h3>
             <br/>
             <Table striped bordered hover id='mytbl'>
