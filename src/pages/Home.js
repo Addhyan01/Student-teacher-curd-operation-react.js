@@ -61,14 +61,14 @@ export default function Home() {
 
             <>
                <div className='container'>
-               <h1 className='text-center mt-5'> Welcome to Dashboard </h1>
-            <h3 className='text-center mt-5'> Student Details </h3>
+               <h1 className='text-center mt-5 text-success'> Welcome to Dashboard </h1>
+            <h3 className='text-center mt-5 text-danger' > Student Details </h3>
             <br/>
             <Table striped bordered hover id='mytbl'>
                             <thead>
                                
                                 <tr>
-                                    <th>#</th>
+                                    <th>#ID</th>
                                     <th>Student  Name</th>
                                     <th>Teachers</th>
                                </tr>
@@ -99,13 +99,13 @@ export default function Home() {
                         </Table>
                         <Link to="/student/create"><Button> Edit Student</Button></Link>
 
-                        <h3 className='text-center mt-5'> Teacher Details </h3>
+                        <h3 className='text-center mt-5 text-danger'> Teacher Details </h3>
             <br/>
             <Table striped bordered hover id='mytbl'>
                             <thead>
                                
                                 <tr>
-                                    <th>#</th>
+                                    <th>#ID</th>
                                     <th>Teacher Name</th>
                                     <th>Student</th>
                                </tr>
@@ -128,6 +128,9 @@ export default function Home() {
                               </tbody>
                         </Table>
                         <Link to="/teacher/create"><Button> Edit Teacher</Button></Link>
+
+                        <br/><br/><br/>
+                        <p className='text-center border'>This project is Created By Addhyan Kumar Email - addhyankumar14@gmail.com</p>
 
                       
                  </div>    
