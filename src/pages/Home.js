@@ -94,14 +94,6 @@ export default function Home() {
                                 })
                               }
                               
-                              <tr>
-                                  <td>1</td>
-                                  <td>Name</td>
-                                  <td>Teacher</td>
-
-
-                              </tr>
-                              
 
                             </tbody>
                         </Table>
