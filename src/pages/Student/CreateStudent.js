@@ -1,6 +1,7 @@
 
 import React, { useEffect, useState } from 'react'
 import { Form, Button, Table } from 'react-bootstrap'
+import { Link } from 'react-router-dom';
 
 
 export default function CreateStudent() {
@@ -73,13 +74,14 @@ export default function CreateStudent() {
             alert("Student is successfully Created ");
             // window.location.reload();   ===> this is way to relode whole page but it is not working properly;
             document.querySelector("table#mytbl > tbody").innerHTML += `<tr key={ind}>
+                                                                                    <td>1</td>
                                                                                     <td>${document.getElementById('student_name').value}</td>
-                                                                                    <td>${document.getElementById('student_name').value}</td>
-                                                                                    <td></td>
+                                                                                    <td>${teacherName}</td>
+                                                                                    
                                                                                     <td>
-                                                                                        <Button className="btn btn-sm me-1 btn-success" >View</Button>
-                                                                                        <Button className="btn btn-sm me-1 btn-primary">Edit</Button>
-                                                                                        <Button className="btn btn-sm me-1 btn-danger"  onClick={(e)=>{ deleteStudent(e) }} >Delete</Button>
+                                                                                        <Button class="btn btn-sm me-1 btn-success" >View</Button>
+                                                                                        <Button class="btn btn-sm me-1 btn-primary">Edit</Button>
+                                                                                        <Button class="btn btn-sm me-1 btn-danger" >Delete</Button>
 
                                                                                 </td>
                                                             
@@ -134,6 +136,12 @@ export default function CreateStudent() {
 
     }
 
+    let handleChange = (e) =>{
+        var options = e.target.getElementById("option");
+        var optionHtml = options[e.target.selectedIndex].innerHTML;
+        setTeacherName(options[e.target.selectedIndex].innerHTML);
+
+    }
 
 
                 return (
@@ -149,7 +157,7 @@ export default function CreateStudent() {
                         <Form>
                         <Form.Group className="mb-3" controlId="formBasicEmail"> 
                         <Form.Label>Select Teacher Name:</Form.Label>
-                            <Form.Select   value={teacherIds} id='teacher' name="teacher"  onChange={(e)=>{handleSelect(e.target.selectedOptions)}}>
+                            <Form.Select multiple  value={teacherIds} id='teacher' name="teacher"  onChange={(e)=>{handleSelect(e.target.selectedOptions)}}>
 
                                     {
                                         teachers.map((cvs, inds, arrs)=>{
@@ -225,6 +233,7 @@ export default function CreateStudent() {
                                
                             </tbody>
                             </Table>
+                            <Link to="/"><Button> Dashboard</Button></Link>
 
 
 
