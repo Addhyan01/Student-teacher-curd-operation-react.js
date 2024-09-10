@@ -136,13 +136,7 @@ export default function CreateStudent() {
 
     }
 
-    let handleChange = (e) =>{
-        var options = e.target.getElementById("option");
-        var optionHtml = options[e.target.selectedIndex].innerHTML;
-        setTeacherName(options[e.target.selectedIndex].innerHTML);
-
-    }
-
+   
 
                 return (
                     <div className='container'>
