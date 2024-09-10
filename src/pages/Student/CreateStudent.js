@@ -76,7 +76,7 @@ export default function CreateStudent() {
             document.querySelector("table#mytbl > tbody").innerHTML += `<tr key={ind}>
                                                                                     <td>1</td>
                                                                                     <td>${document.getElementById('student_name').value}</td>
-                                                                                    <td>${teacherName}</td>
+                                                                                    <td>Loding...</td>
                                                                                     
                                                                                     <td>
                                                                                         <Button class="btn btn-sm me-1 btn-success" >View</Button>
